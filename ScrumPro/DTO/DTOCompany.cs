@@ -21,7 +21,7 @@ namespace ScrumPRO.DTO
 
         public DTOCompany GetById(int id)
         {
-            var company = db.Companies.Find(id);
+            var company = db.Companies.SingleOrDefault(c => c.Id == id);
             return Mapper.Map<DTOCompany>(company);
         }
 

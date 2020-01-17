@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Http;
 using ScrumPRO.DTO;
 
 namespace ScrumPRO.Controllers
@@ -19,8 +20,9 @@ namespace ScrumPRO.Controllers
         public ActionResult Test()
         {
             var c = new DTOCompany();
-            c = c.GetById(2);
-           
+            c = c.GetById(1);
+
+
             return Content(c.Name);
         }
     }

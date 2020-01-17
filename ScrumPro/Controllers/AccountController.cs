@@ -51,6 +51,8 @@ namespace ScrumPRO.Controllers
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
+
+
         // GET api/Account/UserInfo
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("UserInfo")]
@@ -318,6 +320,10 @@ namespace ScrumPRO.Controllers
             return logins;
         }
 
+
+
+
+
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
@@ -337,8 +343,14 @@ namespace ScrumPRO.Controllers
                 return GetErrorResult(result);
             }
 
-            return Ok();
+            return Ok(user);
         }
+
+
+
+
+
+
 
         // POST api/Account/RegisterExternal
         [OverrideAuthentication]
@@ -372,6 +384,7 @@ namespace ScrumPRO.Controllers
             }
             return Ok();
         }
+
 
         protected override void Dispose(bool disposing)
         {
