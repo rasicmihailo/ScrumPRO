@@ -26,6 +26,15 @@ namespace ScrumPRO.Models
         public ICollection<StoryTask> StoryTasks { get; set; }
         public ICollection<Sprint> Sprints { get; set; }
 
+        public ApplicationUser()
+        {
+            this.Companies = new List<Company>();
+            this.Projects = new List<Project>();
+            this.Stories = new List<Story>();
+            this.StoryTasks = new List<StoryTask>();
+            this.Sprints = new List<Sprint>();
+        }
+
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

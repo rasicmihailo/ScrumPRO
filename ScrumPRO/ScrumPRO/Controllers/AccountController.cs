@@ -8,7 +8,9 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using ScrumPRO.DTO;
 using ScrumPRO.Models;
+using AutoMapper;
 
 namespace ScrumPRO.Controllers
 {
@@ -61,16 +63,19 @@ namespace ScrumPRO.Controllers
             return View();
         }
 
+
+
         //
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+       // [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                //return View(model);
+                return HttpNotFound();
             }
 
             // This doesn't count login failures towards account lockout
@@ -79,17 +84,28 @@ namespace ScrumPRO.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    //return Content(model.Email);      
+                    {
+                        ApplicationDbContext _context = new ApplicationDbContext();
+                        var user = _context.Users.Where(u => u.Email.Equals(model.Email)).SingleOrDefault();
+                        var dtoUser = Mapper.Map<ApplicationUser, DTOAppUser>(user);
+                        return Json(dtoUser);
+                    }
                 case SignInStatus.LockedOut:
-                    return View("Lockout");
+                    //return View("Lockout");
+                    return null;
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    //return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return null;
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                    // return View(model);
+                    return null;
             }
         }
+
+
 
         //
         // GET: /Account/VerifyCode
@@ -146,24 +162,32 @@ namespace ScrumPRO.Controllers
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    PreferredName = model.PreferredName,
+                    UserName = model.Email,
+                    Email = model.Email
+                };
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return Json(model);
                 }
                 AddErrors(result);
             }

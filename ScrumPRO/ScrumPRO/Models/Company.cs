@@ -12,5 +12,11 @@ namespace ScrumPRO.Models
         public String Location { get; set; }
         public ICollection<ApplicationUser> Users { get; set; }
 
+
+        public Company()
+        {
+            this.Users = new List<ApplicationUser>();
+        }
+
     }
 }

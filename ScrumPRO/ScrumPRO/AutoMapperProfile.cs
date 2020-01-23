@@ -14,6 +14,7 @@ namespace ScrumPRO
         {
             CreateMap<Company, DTOCompany>();
             CreateMap<ApplicationUser, DTOAppUser>();
+            CreateMap<DTOAppUser, ApplicationUser>();
             CreateMap<Project, DTOProject>();
             CreateMap<Story, DTOStory>();
             CreateMap<StoryTask, DTOStoryTask>();
