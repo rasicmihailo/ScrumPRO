@@ -1,4 +1,4 @@
-package com.elfak.scrumpro.DTOs;
+package com.elfak.scrumpro.dto;
 
 import lombok.Builder;
 import lombok.Getter;

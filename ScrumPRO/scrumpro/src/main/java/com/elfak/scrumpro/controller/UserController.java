@@ -1,9 +1,12 @@
 package com.elfak.scrumpro.controller;
 
-import com.elfak.scrumpro.DTOs.UserDTO;
+import com.elfak.scrumpro.dto.UserDTO;
+import com.elfak.scrumpro.messaging.UserQueueWriter;
+import com.elfak.scrumpro.messaging.UserResponse;
 import com.elfak.scrumpro.model.User;
 import com.elfak.scrumpro.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -14,21 +17,31 @@ import javax.annotation.PostConstruct;
 @CrossOrigin
 public class UserController {
 
-    private final UserRepository userRepository;
+    @Autowired
+    UserQueueWriter userQueueWriter;
+
+    @Autowired
+    private UserResponse responses;
 
     @PostConstruct
     private void createUser() {
-        User user = User.builder().username("mihailo").build();
+        // User user = User.builder().username("mihailo").build();
 
-        userRepository.save(user);
+        // userRepository.save(user);
     }
 
     @GetMapping("/info/{id}")
     public UserDTO getUserById(@PathVariable Long id) {
-        User user = userRepository.findById(id).orElseGet(null);
 
-        if (user != null) {
-            return UserDTO.builder().id(user.getId()).username(user.getUsername()).build();
+        userQueueWriter.send(id.toString());
+
+        while(responses.getAll().size() == 0) {
+        }
+        String username = responses.getAll().get(0);
+        responses.clear();
+
+        if (username != null) {
+            return UserDTO.builder().id(id).username(username).build();
         } else {
             return UserDTO.builder().build();
         }
