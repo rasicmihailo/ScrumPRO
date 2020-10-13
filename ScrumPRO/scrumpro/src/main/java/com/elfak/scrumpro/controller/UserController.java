@@ -4,12 +4,17 @@ import com.elfak.scrumpro.dto.UserDTO;
 import com.elfak.scrumpro.messaging.UserQueueWriter;
 import com.elfak.scrumpro.messaging.UserResponse;
 import com.elfak.scrumpro.model.User;
-import com.elfak.scrumpro.repository.UserRepository;
+import com.elfak.scrumpro.security.JwtTokenProvider;
+import com.elfak.scrumpro.service.inteface.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -22,6 +27,15 @@ public class UserController {
 
     @Autowired
     private UserResponse responses;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @PostConstruct
     private void createUser() {
@@ -41,9 +55,36 @@ public class UserController {
         responses.clear();
 
         if (username != null) {
-            return UserDTO.builder().id(id).username(username).build();
+            return UserDTO.builder().username(username).build();
         } else {
             return UserDTO.builder().build();
         }
+    }
+
+
+
+    @PostMapping("/register")
+    public Object register(@RequestBody UserDTO requestDO) {
+        userService.createUser(requestDO.getUsername(), requestDO.getPassword());
+
+        Map<String,Object> map = new HashMap<>();
+
+        map.put("valid", true);
+        map.put("errors", "");
+        map.put("value", "success");
+
+        return map;
+    }
+
+    @PostMapping("/login")
+    public UserDTO login(@RequestBody UserDTO requestDO) {
+        String username = requestDO.getUsername();
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDO.getPassword()));
+
+        User foundUser = userService.getUserByUsername(username);
+
+        String token = "Bearer " + jwtTokenProvider.createToken(username, foundUser.getRole());
+
+        return UserDTO.builder().username(foundUser.getUsername()).token(token).build();
     }
 }
