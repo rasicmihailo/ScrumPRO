@@ -1,11 +1,31 @@
 package com.elfak.scrumpro.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.elfak.scrumpro.dto.CompanyDTO;
+import com.elfak.scrumpro.service.CompanyService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/company")
 @CrossOrigin
 public class CompanyController {
+
+    @Autowired
+    private CompanyService companyService;
+
+    @PostMapping("/create")
+    public Object register(@RequestHeader("Authorization") String token, @RequestBody CompanyDTO companyDTO) {
+
+        companyService.createCompany(token, companyDTO);
+        Map<String,Object> map = new HashMap<>();
+
+        map.put("valid", true);
+        map.put("errors", "");
+        map.put("value", "success");
+
+        return map;
+    }
 }

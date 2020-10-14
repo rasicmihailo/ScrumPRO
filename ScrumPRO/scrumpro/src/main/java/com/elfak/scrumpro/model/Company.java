@@ -6,7 +6,9 @@ import javax.persistence.*;
 import java.util.List;
 
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "companies")
 public class Company {
