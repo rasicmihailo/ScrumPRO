@@ -1,5 +1,6 @@
 package com.elfak.scrumpro.service;
 
+import com.elfak.scrumpro.enumeration.RoleEnum;
 import com.elfak.scrumpro.model.User;
 import com.elfak.scrumpro.repository.UserRepository;
 import com.elfak.scrumpro.security.JwtTokenProvider;
@@ -42,7 +43,7 @@ public class CustomUserDetailsService implements UserDetailsService, UserService
         User user = User.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
-                .role("ROLE_USER")
+                .role(RoleEnum.ROLE_USER)
                 .build();
 
         User createdUser = userRepository.save(user);

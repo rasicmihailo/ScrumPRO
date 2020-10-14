@@ -14,6 +14,12 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column
+    private String name;
+
+    @Column
+    private String content;
+
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;

@@ -73,7 +73,7 @@ public class UserController {
 
         User foundUser = userService.getUserByUsername(username);
 
-        String token = "Bearer " + jwtTokenProvider.createToken(username, foundUser.getRole());
+        String token = "Bearer " + jwtTokenProvider.createToken(username, foundUser.getRole().name());
 
         return UserDTO.builder().username(foundUser.getUsername()).token(token).build();
     }

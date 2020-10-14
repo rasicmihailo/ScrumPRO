@@ -15,6 +15,9 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column
+    private String name;
+
     @ManyToOne
     @JoinColumn(name = "boss_id")
     private User boss;

@@ -1,5 +1,6 @@
 package com.elfak.scrumpro.model;
 
+import com.elfak.scrumpro.enumeration.RoleEnum;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,7 +30,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column
-    private String role;
+    private RoleEnum role;
 
     @OneToMany(mappedBy = "boss", fetch = FetchType.LAZY)
     private List<Company> myCompanies;
@@ -45,7 +46,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(role));
+        return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
     }
     @Override
     public boolean isAccountNonExpired() {

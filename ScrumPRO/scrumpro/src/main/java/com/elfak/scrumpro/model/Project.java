@@ -16,6 +16,9 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column
+    private String name;
+
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
