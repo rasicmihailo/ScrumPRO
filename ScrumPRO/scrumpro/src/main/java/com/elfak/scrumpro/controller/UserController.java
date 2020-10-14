@@ -54,8 +54,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public Object register(@RequestBody UserDTO requestDO) {
-        userService.createUser(requestDO.getUsername(), requestDO.getPassword());
+    public Object register(@RequestBody UserDTO userDTO) {
+        userService.createUser(userDTO.getUsername(), userDTO.getPassword());
 
         Map<String,Object> map = new HashMap<>();
 
@@ -67,9 +67,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public UserDTO login(@RequestBody UserDTO requestDO) {
-        String username = requestDO.getUsername();
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDO.getPassword()));
+    public UserDTO login(@RequestBody UserDTO userDTO) {
+        String username = userDTO.getUsername();
+        String password = userDTO.getPassword();
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
         User foundUser = userService.getUserByUsername(username);
 
