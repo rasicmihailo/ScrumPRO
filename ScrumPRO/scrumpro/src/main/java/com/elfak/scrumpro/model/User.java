@@ -31,13 +31,16 @@ public class User implements UserDetails {
     @Column
     private String role;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "boss", fetch = FetchType.LAZY)
+    private List<Company> myCompanies;
+
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<Company> companies;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<Task> tasks;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<Project> projects;
 
     @Override

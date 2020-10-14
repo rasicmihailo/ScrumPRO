@@ -12,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,13 +36,6 @@ public class UserController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    @PostConstruct
-    private void createUser() {
-        // User user = User.builder().username("mihailo").build();
-
-        // userRepository.save(user);
-    }
-
     @GetMapping("/info/{id}")
     public UserDTO getUserById(@PathVariable Long id) {
 
@@ -60,8 +52,6 @@ public class UserController {
             return UserDTO.builder().build();
         }
     }
-
-
 
     @PostMapping("/register")
     public Object register(@RequestBody UserDTO requestDO) {

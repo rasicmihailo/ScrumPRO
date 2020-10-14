@@ -16,9 +16,12 @@ public class Company {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "boss_id")
+    private User boss;
 
-    @OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<User> users;
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
     private List<Project> projects;
 }

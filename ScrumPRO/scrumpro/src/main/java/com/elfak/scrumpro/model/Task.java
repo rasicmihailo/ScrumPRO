@@ -18,6 +18,6 @@ public class Task {
     @JoinColumn(name = "project_id")
     private Project project;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<User> users;
 }
