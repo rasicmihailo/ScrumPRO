@@ -2,6 +2,7 @@ package com.elfak.scrumpro.service;
 
 import com.elfak.scrumpro.dto.CompanyDTO;
 import com.elfak.scrumpro.dto.CompanyUserDTO;
+import com.elfak.scrumpro.enumeration.RoleEnum;
 import com.elfak.scrumpro.model.Company;
 import com.elfak.scrumpro.model.Project;
 import com.elfak.scrumpro.model.User;
@@ -48,5 +49,19 @@ public class CompanyService {
         } else {
             throw new RuntimeException();
         }
+    }
+
+    public List<CompanyDTO> getCompanies(String token) {
+        User me = userService.getUser(userService.getUserIdFromToken(token));
+
+        List<Company> companiesBoss = companyRepository.findAllByBossId(me.getId());
+        List<Company> companiesEmployee = companyRepository.findAllByUsersContains(me);
+        companiesEmployee.removeAll(companiesBoss);
+
+        List<CompanyDTO> companies = new ArrayList<>();
+        companiesBoss.forEach(company -> companies.add(CompanyDTO.builder().id(company.getId()).name(company.getName()).role(RoleEnum.ROLE_ADMIN).build()));
+        companiesEmployee.forEach(company -> companies.add(CompanyDTO.builder().id(company.getId()).name(company.getName()).role(RoleEnum.ROLE_USER).build()));
+
+        return companies;
     }
 }

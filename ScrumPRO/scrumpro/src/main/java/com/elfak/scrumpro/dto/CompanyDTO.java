@@ -1,5 +1,6 @@
 package com.elfak.scrumpro.dto;
 
+import com.elfak.scrumpro.enumeration.RoleEnum;
 import lombok.*;
 
 @Builder
@@ -11,4 +12,5 @@ public class CompanyDTO {
 
     private Long id;
     private String name;
+    private RoleEnum role;
 }
