@@ -1,6 +1,9 @@
 package com.elfak.scrumpro.service;
 
+import com.elfak.scrumpro.dto.CompanyDTO;
 import com.elfak.scrumpro.enumeration.RoleEnum;
+import com.elfak.scrumpro.model.Company;
+import com.elfak.scrumpro.model.Project;
 import com.elfak.scrumpro.model.User;
 import com.elfak.scrumpro.repository.UserRepository;
 import com.elfak.scrumpro.security.JwtTokenProvider;
@@ -12,12 +15,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CustomUserDetailsService implements UserDetailsService, UserService {
 
     private UserRepository userRepository;
 
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private CompanyService companyService;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -86,5 +95,33 @@ public class CustomUserDetailsService implements UserDetailsService, UserService
             initiatorUserId = user.getId();
         }
         return initiatorUserId;
+    }
+
+    @Override
+    public List<User> getAllUsers(String token) {
+        User me = this.getUser(this.getUserIdFromToken(token));
+
+        List<User> users = (List<User>) userRepository.findAll();
+
+        users.remove(me);
+
+        return users;
+    }
+
+    @Override
+    public List<User> getUsersInCompany(String token, CompanyDTO companyDTO) {
+        User me = this.getUser(this.getUserIdFromToken(token));
+
+        Company company = companyService.getById(companyDTO.getId());
+
+        if (company != null) {
+            List<User> users = userRepository.findAByCompaniesContains(company);
+
+            users.remove(me);
+
+            return users;
+        } else {
+            throw new RuntimeException();
+        }
     }
 }

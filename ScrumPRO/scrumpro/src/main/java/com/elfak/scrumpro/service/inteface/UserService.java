@@ -1,6 +1,9 @@
 package com.elfak.scrumpro.service.inteface;
 
+import com.elfak.scrumpro.dto.CompanyDTO;
 import com.elfak.scrumpro.model.User;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -15,4 +18,8 @@ public interface UserService {
     User getUserInfo(String token);
 
     Long getUserIdFromToken(String token);
+
+    List<User> getAllUsers(String token);
+
+    List<User> getUsersInCompany(String token, CompanyDTO companyDTO);
 }

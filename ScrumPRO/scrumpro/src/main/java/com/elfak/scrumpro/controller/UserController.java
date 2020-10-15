@@ -1,5 +1,6 @@
 package com.elfak.scrumpro.controller;
 
+import com.elfak.scrumpro.dto.CompanyDTO;
 import com.elfak.scrumpro.dto.UserDTO;
 import com.elfak.scrumpro.messaging.UserQueueWriter;
 import com.elfak.scrumpro.messaging.UserResponse;
@@ -12,7 +13,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -77,5 +80,27 @@ public class UserController {
         String token = "Bearer " + jwtTokenProvider.createToken(username, foundUser.getRole().name());
 
         return UserDTO.builder().username(foundUser.getUsername()).token(token).build();
+    }
+
+    @GetMapping("/all")
+    public List<UserDTO> getAllUsers(@RequestHeader("Authorization") String token) {
+        List<User> users = userService.getAllUsers(token);
+
+        List<UserDTO> userDTOS = new ArrayList<>();
+
+        users.forEach(user -> userDTOS.add(UserDTO.builder().username(user.getUsername()).build()));
+
+        return userDTOS;
+    }
+
+    @GetMapping("/company")
+    public List<UserDTO> getUsersInCompany(@RequestHeader("Authorization") String token, @RequestBody CompanyDTO companyDTO) {
+        List<User> users = userService.getUsersInCompany(token, companyDTO);
+
+        List<UserDTO> userDTOS = new ArrayList<>();
+
+        users.forEach(user -> userDTOS.add(UserDTO.builder().username(user.getUsername()).build()));
+
+        return userDTOS;
     }
 }

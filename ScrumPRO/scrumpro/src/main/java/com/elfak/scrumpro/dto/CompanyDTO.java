@@ -9,5 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 public class CompanyDTO {
 
+    private Long id;
     private String name;
 }
