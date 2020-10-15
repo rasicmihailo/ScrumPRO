@@ -8,6 +8,9 @@ import com.elfak.scrumpro.service.inteface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CompanyService {
 
@@ -20,7 +23,9 @@ public class CompanyService {
     public void createCompany(String token, CompanyDTO companyDTO) {
         User me = userService.getUser(userService.getUserIdFromToken(token));
 
-        Company company = Company.builder().name(companyDTO.getName()).boss(me).build();
+        List<User> users = new ArrayList<>();
+        users.add(me);
+        Company company = Company.builder().name(companyDTO.getName()).boss(me).users(users).build();
 
         companyRepository.save(company);
     }
