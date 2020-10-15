@@ -75,11 +75,11 @@ public class UserController {
         String password = userDTO.getPassword();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
-        User foundUser = userService.getUserByUsername(username);
+        User user = userService.getUserByUsername(username);
 
-        String token = "Bearer " + jwtTokenProvider.createToken(username, foundUser.getRole().name());
+        String token = "Bearer " + jwtTokenProvider.createToken(username, user.getRole().name());
 
-        return UserDTO.builder().username(foundUser.getUsername()).token(token).build();
+        return UserDTO.builder().id(user.getId()).username(user.getUsername()).token(token).build();
     }
 
     @GetMapping("/all")
@@ -88,7 +88,7 @@ public class UserController {
 
         List<UserDTO> userDTOS = new ArrayList<>();
 
-        users.forEach(user -> userDTOS.add(UserDTO.builder().username(user.getUsername()).build()));
+        users.forEach(user -> userDTOS.add(UserDTO.builder().id(user.getId()).username(user.getUsername()).build()));
 
         return userDTOS;
     }
@@ -99,7 +99,7 @@ public class UserController {
 
         List<UserDTO> userDTOS = new ArrayList<>();
 
-        users.forEach(user -> userDTOS.add(UserDTO.builder().username(user.getUsername()).build()));
+        users.forEach(user -> userDTOS.add(UserDTO.builder().id(user.getId()).username(user.getUsername()).build()));
 
         return userDTOS;
     }

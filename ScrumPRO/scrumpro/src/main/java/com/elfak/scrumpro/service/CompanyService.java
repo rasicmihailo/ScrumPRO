@@ -1,7 +1,9 @@
 package com.elfak.scrumpro.service;
 
 import com.elfak.scrumpro.dto.CompanyDTO;
+import com.elfak.scrumpro.dto.CompanyUserDTO;
 import com.elfak.scrumpro.model.Company;
+import com.elfak.scrumpro.model.Project;
 import com.elfak.scrumpro.model.User;
 import com.elfak.scrumpro.repository.CompanyRepository;
 import com.elfak.scrumpro.service.inteface.UserService;
@@ -32,5 +34,19 @@ public class CompanyService {
 
     public Company getById(Long id) {
         return companyRepository.findById(id).orElseGet(null);
+    }
+
+    public void addUser(String token, CompanyUserDTO companyUserDTO) {
+        User me = userService.getUser(userService.getUserIdFromToken(token));
+
+        Company company = this.getById(companyUserDTO.getCompanyId());
+
+        if (company != null && me.getId().equals(company.getBoss().getId())) {
+            company.getUsers().add(User.builder().id(companyUserDTO.getUserId()).build());
+
+            companyRepository.save(company);
+        } else {
+            throw new RuntimeException();
+        }
     }
 }
