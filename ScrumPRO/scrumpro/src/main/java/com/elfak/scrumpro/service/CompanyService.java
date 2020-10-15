@@ -24,4 +24,8 @@ public class CompanyService {
 
         companyRepository.save(company);
     }
+
+    public Company getById(Long id) {
+        return companyRepository.findById(id).orElseGet(null);
+    }
 }

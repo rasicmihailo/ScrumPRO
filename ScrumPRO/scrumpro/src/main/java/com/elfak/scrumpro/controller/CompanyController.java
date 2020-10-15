@@ -17,7 +17,7 @@ public class CompanyController {
     private CompanyService companyService;
 
     @PostMapping("/create")
-    public Object register(@RequestHeader("Authorization") String token, @RequestBody CompanyDTO companyDTO) {
+    public Object create(@RequestHeader("Authorization") String token, @RequestBody CompanyDTO companyDTO) {
 
         companyService.createCompany(token, companyDTO);
         Map<String,Object> map = new HashMap<>();
