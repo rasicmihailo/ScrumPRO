@@ -63,12 +63,18 @@ public class ProjectService {
     public List<ProjectDTO> getProjects(String token, CompanyDTO companyDTO) {
         User me = userService.getUser(userService.getUserIdFromToken(token));
 
-        List<Project> projects = projectRepository.findAllByCompanyId(companyDTO.getId());
+        Company company = companyService.getById(companyDTO.getId());
 
-        List<ProjectDTO> projectDTOS = new ArrayList<>();
+        if (company != null && company.getUsers().contains(me)) {
+            List<Project> projects = projectRepository.findAllByCompanyIdAndUsersContains(company.getId(), me);
 
-        projects.forEach(project -> projectDTOS.add(ProjectDTO.builder().id(project.getId()).name(project.getName()).build()));
+            List<ProjectDTO> projectDTOS = new ArrayList<>();
 
-        return projectDTOS;
+            projects.forEach(project -> projectDTOS.add(ProjectDTO.builder().id(project.getId()).name(project.getName()).build()));
+
+            return projectDTOS;
+        } else {
+            throw new RuntimeException();
+        }
     }
 }
