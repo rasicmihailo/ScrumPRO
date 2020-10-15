@@ -1,6 +1,7 @@
 package com.elfak.scrumpro.service;
 
 import com.elfak.scrumpro.dto.ProjectDTO;
+import com.elfak.scrumpro.dto.ProjectUserDTO;
 import com.elfak.scrumpro.model.Company;
 import com.elfak.scrumpro.model.Project;
 import com.elfak.scrumpro.model.User;
@@ -33,6 +34,24 @@ public class ProjectService {
             List<User> users = new ArrayList<>();
             users.add(me);
             Project project = Project.builder().company(company).name(projectDTO.getName()).users(users).build();
+
+            projectRepository.save(project);
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
+    public Project getById(Long id) {
+        return projectRepository.findById(id).orElseGet(null);
+    }
+
+    public void addUser(String token, ProjectUserDTO projectUserDTO) {
+        User me = userService.getUser(userService.getUserIdFromToken(token));
+
+        Project project = this.getById(projectUserDTO.getProjectId());
+
+        if (project != null && me.getId().equals(project.getCompany().getBoss().getId())) {
+            project.getUsers().add(User.builder().id(projectUserDTO.getUserId()).build());
 
             projectRepository.save(project);
         } else {
