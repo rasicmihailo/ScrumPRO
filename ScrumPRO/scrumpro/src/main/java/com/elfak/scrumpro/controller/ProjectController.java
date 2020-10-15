@@ -1,5 +1,6 @@
 package com.elfak.scrumpro.controller;
 
+import com.elfak.scrumpro.dto.CompanyDTO;
 import com.elfak.scrumpro.dto.CompanyUserDTO;
 import com.elfak.scrumpro.dto.ProjectDTO;
 import com.elfak.scrumpro.dto.ProjectUserDTO;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -41,5 +43,11 @@ public class ProjectController {
         map.put("value", "success");
 
         return map;
+    }
+
+    @GetMapping()
+    public List<ProjectDTO> getProjects(@RequestHeader("Authorization") String token, @RequestBody CompanyDTO companyDTO) {
+
+        return projectService.getProjects(token, companyDTO);
     }
 }
