@@ -28,9 +28,6 @@ public class TaskService {
     TaskQueueWriter taskQueueWriter;
 
     public List<Task> getTasksForProject(String token, Long projectId) {
-        if (token.equals("superadmin")) {
-            return taskRepository.findAllByProjectId(projectId);
-        }
         User me = userService.getUser(userService.getUserIdFromToken(token));
         Project project = projectService.getById(projectId);
 
