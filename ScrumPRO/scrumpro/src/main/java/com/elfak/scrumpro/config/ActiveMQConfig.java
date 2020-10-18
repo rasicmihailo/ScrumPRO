@@ -3,12 +3,10 @@ package com.elfak.scrumpro.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQQueue;
-import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
@@ -24,37 +22,16 @@ public class ActiveMQConfig {
     @Value("${spring.activemq.broker-url}")
     private String brokerUrl;
 
-//    @Value("${spring.activemq.username}")
-//    String userName;
-//
-//    @Value("${spring.activemq.password}")
-//    String password;
-
     @Bean
-    public Queue queue() {
-        return new ActiveMQQueue("user-queue");
+    public Queue taskQueue() {
+        return new ActiveMQQueue("task-queue");
     }
-
-//    @Bean
-//    public Queue trainerQueue() {
-//        return new ActiveMQQueue("trainer-queue"); }
-//
-//    @Bean
-//    public Topic trainerServiceTopic() {
-//        return new ActiveMQTopic("trainer-service-topic");
-//    }
-//
-//    @Bean
-//    public Queue serviceTrainerQueue() {
-//        return new ActiveMQQueue("service-trainer-queue");
-//    }
 
     @Bean
     public ActiveMQConnectionFactory activeMQConnectionFactory() {
         ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory();
         factory.setBrokerURL(brokerUrl);
-        //factory.setUserName(userName);
-        //factory.setPassword(password);
+        factory.setTrustAllPackages(true);
         return factory;
     }
 
@@ -70,18 +47,6 @@ public class ActiveMQConfig {
         converter.setTypeIdPropertyName("_type");
         return converter;
     }
-
-//    /*
-//     * Used for Receiving Message
-//     */
-//    @Bean
-//    public JmsListenerContainerFactory<?> jsaFactory(ConnectionFactory connectionFactory,
-//                                                     DefaultJmsListenerContainerFactoryConfigurer configurer) {
-//        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-//        factory.setMessageConverter(jacksonJmsMessageConverter());
-//        configurer.configure(factory, connectionFactory);
-//        return factory;
-//    }
 
     @Component
     public class JsonMessageConverter implements MessageConverter {

@@ -2,8 +2,6 @@ package com.elfak.scrumpro.controller;
 
 import com.elfak.scrumpro.dto.CompanyDTO;
 import com.elfak.scrumpro.dto.UserDTO;
-import com.elfak.scrumpro.messaging.UserQueueWriter;
-import com.elfak.scrumpro.messaging.UserResponse;
 import com.elfak.scrumpro.model.User;
 import com.elfak.scrumpro.security.JwtTokenProvider;
 import com.elfak.scrumpro.service.inteface.UserService;
@@ -25,12 +23,6 @@ import java.util.Map;
 public class UserController {
 
     @Autowired
-    UserQueueWriter userQueueWriter;
-
-    @Autowired
-    private UserResponse responses;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
@@ -38,23 +30,6 @@ public class UserController {
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
-
-    @GetMapping("/info/{id}")
-    public UserDTO getUserById(@PathVariable Long id) {
-
-        userQueueWriter.send(id.toString());
-
-        while(responses.getAll().size() == 0) {
-        }
-        String username = responses.getAll().get(0);
-        responses.clear();
-
-        if (username != null) {
-            return UserDTO.builder().username(username).build();
-        } else {
-            return UserDTO.builder().build();
-        }
-    }
 
     @PostMapping("/register")
     public Object register(@RequestBody UserDTO userDTO) {

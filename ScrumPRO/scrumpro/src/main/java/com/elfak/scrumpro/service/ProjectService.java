@@ -77,4 +77,8 @@ public class ProjectService {
             throw new RuntimeException();
         }
     }
+
+    public List<Project> getAllProjects() {
+        return (List<Project>) projectRepository.findAll();
+    }
 }

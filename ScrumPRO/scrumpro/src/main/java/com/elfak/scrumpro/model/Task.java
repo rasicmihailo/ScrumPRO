@@ -1,11 +1,14 @@
 package com.elfak.scrumpro.model;
+import com.elfak.scrumpro.enumeration.TaskEnum;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tasks")
 public class Task {
@@ -20,10 +23,10 @@ public class Task {
     @Column
     private String content;
 
+    @Column
+    private TaskEnum state;
+
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<User> users;
 }

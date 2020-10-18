@@ -39,9 +39,6 @@ public class User implements UserDetails {
     private List<Company> companies;
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
-    private List<Task> tasks;
-
-    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<Project> projects;
 
     @Override

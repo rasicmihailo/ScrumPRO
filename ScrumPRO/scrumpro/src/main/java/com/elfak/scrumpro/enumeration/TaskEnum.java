@@ -1,4 +1,9 @@
 package com.elfak.scrumpro.enumeration;
 
-public class TaskEnum {
+public enum TaskEnum {
+    TO_DO,
+    IN_PROGRESS,
+    TO_TEST,
+    TO_REVIEW,
+    DONE
 }
