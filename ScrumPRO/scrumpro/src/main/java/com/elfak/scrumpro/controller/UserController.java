@@ -68,9 +68,9 @@ public class UserController {
         return userDTOS;
     }
 
-    @GetMapping("/company")
-    public List<UserDTO> getUsersInCompany(@RequestHeader("Authorization") String token, @RequestBody CompanyDTO companyDTO) {
-        List<User> users = userService.getUsersInCompany(token, companyDTO);
+    @GetMapping("/company/{companyId}")
+    public List<UserDTO> getUsersInCompany(@RequestHeader("Authorization") String token, @PathVariable String companyId) {
+        List<User> users = userService.getUsersInCompany(token, companyId);
 
         List<UserDTO> userDTOS = new ArrayList<>();
 

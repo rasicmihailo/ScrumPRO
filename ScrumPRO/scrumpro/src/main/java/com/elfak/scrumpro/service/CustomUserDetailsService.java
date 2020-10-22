@@ -109,10 +109,10 @@ public class CustomUserDetailsService implements UserDetailsService, UserService
     }
 
     @Override
-    public List<User> getUsersInCompany(String token, CompanyDTO companyDTO) {
+    public List<User> getUsersInCompany(String token, String companyId) {
         User me = this.getUser(this.getUserIdFromToken(token));
 
-        Company company = companyService.getById(companyDTO.getId());
+        Company company = companyService.getById(Long.valueOf(companyId));
 
         if (company != null) {
             List<User> users = userRepository.findAByCompaniesContains(company);

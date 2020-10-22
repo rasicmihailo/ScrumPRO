@@ -21,5 +21,5 @@ public interface UserService {
 
     List<User> getAllUsers(String token);
 
-    List<User> getUsersInCompany(String token, CompanyDTO companyDTO);
+    List<User> getUsersInCompany(String token, String companyId);
 }

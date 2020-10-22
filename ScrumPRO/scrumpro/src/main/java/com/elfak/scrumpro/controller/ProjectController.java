@@ -45,9 +45,9 @@ public class ProjectController {
         return map;
     }
 
-    @GetMapping()
-    public List<ProjectDTO> getProjects(@RequestHeader("Authorization") String token, @RequestBody CompanyDTO companyDTO) {
+    @GetMapping("/{companyId}")
+    public List<ProjectDTO> getProjects(@RequestHeader("Authorization") String token, @PathVariable String companyId) {
 
-        return projectService.getProjects(token, companyDTO);
+        return projectService.getProjects(token, companyId);
     }
 }

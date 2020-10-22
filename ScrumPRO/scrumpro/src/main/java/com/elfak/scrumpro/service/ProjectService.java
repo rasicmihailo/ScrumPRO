@@ -60,10 +60,10 @@ public class ProjectService {
         }
     }
 
-    public List<ProjectDTO> getProjects(String token, CompanyDTO companyDTO) {
+    public List<ProjectDTO> getProjects(String token, String companyId) {
         User me = userService.getUser(userService.getUserIdFromToken(token));
 
-        Company company = companyService.getById(companyDTO.getId());
+        Company company = companyService.getById(Long.valueOf(companyId));
 
         if (company != null && company.getUsers().contains(me)) {
             List<Project> projects = projectRepository.findAllByCompanyIdAndUsersContains(company.getId(), me);

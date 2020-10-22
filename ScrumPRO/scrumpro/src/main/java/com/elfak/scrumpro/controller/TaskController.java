@@ -21,9 +21,9 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    @GetMapping()
-    public List<TaskDTO> getTasks(@RequestHeader("Authorization") String token, @RequestBody ProjectDTO projectDTO) {
-        List<Task> tasks = taskService.getTasksForProject(token, projectDTO.getId());
+    @GetMapping("/{projectId}")
+    public List<TaskDTO> getTasks(@RequestHeader("Authorization") String token, @PathVariable String projectId) {
+        List<Task> tasks = taskService.getTasksForProject(token, Long.valueOf(projectId));
 
         List<TaskDTO> taskDTOS = new ArrayList<>();
         tasks.forEach(task -> taskDTOS.add(TaskDTO.builder()

@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface ProjectRepository extends CrudRepository<Project, Long> {
     List<Project> findAllByCompanyIdAndUsersContains(Long companyId, User user);
+    List<Project> findAllByCompanyId(Long companyId);
 }

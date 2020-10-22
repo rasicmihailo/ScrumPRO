@@ -2,11 +2,13 @@ package com.elfak.scrumpro.service;
 
 import com.elfak.scrumpro.dto.CompanyDTO;
 import com.elfak.scrumpro.dto.CompanyUserDTO;
+import com.elfak.scrumpro.dto.ProjectDTO;
 import com.elfak.scrumpro.enumeration.RoleEnum;
 import com.elfak.scrumpro.model.Company;
 import com.elfak.scrumpro.model.Project;
 import com.elfak.scrumpro.model.User;
 import com.elfak.scrumpro.repository.CompanyRepository;
+import com.elfak.scrumpro.repository.ProjectRepository;
 import com.elfak.scrumpro.service.inteface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,9 @@ public class CompanyService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ProjectRepository projectRepository;
 
     public void createCompany(String token, CompanyDTO companyDTO) {
         User me = userService.getUser(userService.getUserIdFromToken(token));
@@ -46,6 +51,13 @@ public class CompanyService {
             company.getUsers().add(User.builder().id(companyUserDTO.getUserId()).build());
 
             companyRepository.save(company);
+
+            List<Project> projects = projectRepository.findAllByCompanyId(company.getId());
+            projects.forEach(project -> {
+                project.getUsers().add(User.builder().id(companyUserDTO.getUserId()).build());
+            });
+
+            projectRepository.saveAll(projects);
         } else {
             throw new RuntimeException();
         }
