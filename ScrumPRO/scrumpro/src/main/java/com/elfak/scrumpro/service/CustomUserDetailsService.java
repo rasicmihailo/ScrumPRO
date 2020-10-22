@@ -109,6 +109,21 @@ public class CustomUserDetailsService implements UserDetailsService, UserService
     }
 
     @Override
+    public List<User> getUsersNoInCompany(String token, String companyId) {
+        User me = this.getUser(this.getUserIdFromToken(token));
+
+        List<User> users = (List<User>) userRepository.findAll();
+
+        users.remove(me);
+
+        List<User> usersInCompany = this.getUsersInCompany(token, companyId);
+
+        users.removeAll(usersInCompany);
+
+        return users;
+    }
+
+    @Override
     public List<User> getUsersInCompany(String token, String companyId) {
         User me = this.getUser(this.getUserIdFromToken(token));
 

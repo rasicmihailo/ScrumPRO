@@ -21,5 +21,7 @@ public interface UserService {
 
     List<User> getAllUsers(String token);
 
+    List<User> getUsersNoInCompany(String token, String companyId);
+
     List<User> getUsersInCompany(String token, String companyId);
 }
